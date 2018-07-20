@@ -37,7 +37,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
     //Manager for user study data
     let userStudyRecordManager = UserStudyRecordManager()
     
-    
     /**
      A quite standard viewDidLoad
      */
@@ -51,6 +50,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
         
         self.pluginManager = PluginManager(scene: scene)
         self.pluginManager.delegate = self
+        self.arSceneView.delegate = self
         self.arSceneView.session.delegate = self.pluginManager.arManager
         
         self.arSceneView.autoenablesDefaultLighting = true
@@ -79,6 +79,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
 
+        // Track image target
+        if let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) {
+            configuration.detectionImages = referenceImages
+        }
+        
         // Run the view's session
         arSceneView.session.run(configuration)
         
@@ -232,5 +237,48 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
                 })
             })
         }
+    }
+    
+    // MARK: - ARSCNViewDelegate (Image detection results)
+    /// - Tag: ARImageAnchor-Visualizing
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard let imageAnchor = anchor as? ARImageAnchor else { return }
+        let referenceImage = imageAnchor.referenceImage
+
+            
+        // Create a plane to visualize the initial position of the detected image.
+        let plane = SCNPlane(width: referenceImage.physicalSize.width,
+                             height: referenceImage.physicalSize.height)
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.opacity = 0.25
+        
+        /*
+         `SCNPlane` is vertically oriented in its local coordinate space, but
+         `ARImageAnchor` assumes the image is horizontal in its local space, so
+         rotate the plane to match.
+         */
+        planeNode.eulerAngles.x = -.pi / 2
+        
+        /*
+         Image anchors are not tracked after initial detection, so create an
+         animation that limits the duration for which the plane visualization appears.
+         */
+        planeNode.runAction(self.imageHighlightAction)
+        
+        // Add the plane visualization to the scene.
+        node.addChildNode(planeNode)
+        
+        
+    }
+    
+    var imageHighlightAction: SCNAction {
+        return .sequence([
+            .wait(duration: 0.25),
+            .fadeOpacity(to: 0.85, duration: 0.25),
+            .fadeOpacity(to: 0.15, duration: 0.25),
+            .fadeOpacity(to: 0.85, duration: 0.25),
+            .fadeOut(duration: 0.5),
+            .removeFromParentNode()
+            ])
     }
 }
