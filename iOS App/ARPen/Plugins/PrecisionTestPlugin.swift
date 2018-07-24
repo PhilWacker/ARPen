@@ -56,7 +56,6 @@ class PrecisionTestPlugin: Plugin {
     
     func activatePlugin(withScene scene: PenScene) {
         self.currentScene = scene
-        print(currentScene)
     }
     
 }

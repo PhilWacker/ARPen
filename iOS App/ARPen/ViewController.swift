@@ -249,7 +249,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
         guard let imageAnchor = anchor as? ARImageAnchor else { return }
         let referenceImage = imageAnchor.referenceImage
 
-            
+        self.arSceneView.session.setWorldOrigin(relativeTransform: anchor.transform)
+        
         // Create a plane to visualize the initial position of the detected image.
         let plane = SCNPlane(width: referenceImage.physicalSize.width,
                              height: referenceImage.physicalSize.height)
