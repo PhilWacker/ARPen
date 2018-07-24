@@ -164,8 +164,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
         if var pluginConformingToUserStudyProtocol = newActivePlugin as? UserStudyRecordPluginProtocol {
             pluginConformingToUserStudyProtocol.recordManager = self.userStudyRecordManager
         }
+        if let currentScene = self.pluginManager.arManager.scene {
+            newActivePlugin.activatePlugin(withScene: currentScene)
+        }
         
-        newActivePlugin.activatePlugin()
         
         currentActivePluginID = pluginID
     }

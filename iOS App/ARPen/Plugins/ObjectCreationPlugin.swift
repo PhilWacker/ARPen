@@ -15,6 +15,7 @@ class ObjectCreationPlugin: Plugin {
     
     var pluginImage: UIImage? = UIImage.init(named: "ObjectCreationPlugin")
     var pluginIdentifier: String = "Object Creation"
+    var currentScene : PenScene?
     
     private var pointArray: [SCNVector3] = []
     private var alreadyAdded = false
@@ -59,8 +60,8 @@ class ObjectCreationPlugin: Plugin {
         
     }
     
-    func activatePlugin() {
-        
+    func activatePlugin(withScene scene: PenScene) {
+        self.currentScene = scene
     }
     
 }

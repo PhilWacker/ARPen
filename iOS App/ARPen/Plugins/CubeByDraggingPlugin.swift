@@ -15,6 +15,8 @@ class CubeByDraggingPlugin: Plugin, UserStudyRecordPluginProtocol {
     
     var pluginImage : UIImage? = UIImage.init(named: "CubeByDraggingPlugin")
     var pluginIdentifier: String = "CubeByDragging"
+    var currentScene : PenScene?
+    
     /**
      The starting point is the point of the pencil where the button was first pressed.
      If this var is nil, there was no initial point
@@ -83,8 +85,8 @@ class CubeByDraggingPlugin: Plugin, UserStudyRecordPluginProtocol {
         
     }
    
-    func activatePlugin() {
-        
+    func activatePlugin(withScene scene: PenScene) {
+        self.currentScene = scene
     }
     
 }

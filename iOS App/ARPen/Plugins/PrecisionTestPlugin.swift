@@ -1,17 +1,17 @@
 //
-//  PaintPlugin.swift
+//  PrecisionTestPlugin.swift
 //  ARPen
 //
-//  Created by Felix Wehnert on 16.01.18.
+//  Created by Philipp Wacker on 24.07.18.
 //  Copyright © 2018 RWTH Aachen. All rights reserved.
 //
 
 import Foundation
 
-class PaintPlugin: Plugin {
+class PrecisionTestPlugin: Plugin {
     
-    var pluginImage : UIImage? = UIImage.init(named: "PaintPlugin")
-    var pluginIdentifier: String = "Paint"
+    var pluginImage : UIImage? = UIImage.init(named: "cross")
+    var pluginIdentifier: String = "PrecisionTest"
     var currentScene : PenScene?
     /**
      The previous point is the point of the pencil one frame before.
@@ -20,6 +20,8 @@ class PaintPlugin: Plugin {
     private var previousPoint: SCNVector3?
     
     func didUpdateFrame(scene: PenScene, buttons: [Button : Bool]) {
+        print(scene)
+        
         guard scene.markerFound else {
             self.previousPoint = nil
             return
@@ -54,6 +56,7 @@ class PaintPlugin: Plugin {
     
     func activatePlugin(withScene scene: PenScene) {
         self.currentScene = scene
+        print(currentScene)
     }
     
 }
