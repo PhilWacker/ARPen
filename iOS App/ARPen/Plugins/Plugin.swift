@@ -16,6 +16,7 @@ protocol Plugin {
     var pluginImage : UIImage? { get }
     var pluginIdentifier : String { get }
     var currentScene : PenScene? {get set}
+    var currentView : UIView? {get set}
     /**
      This method must be implemented by all plugins.
      Params:
@@ -25,5 +26,5 @@ protocol Plugin {
     func didUpdateFrame(scene: PenScene, buttons: [Button: Bool])
     
     
-    func activatePlugin(withScene scene: PenScene)
+    func activatePlugin(withScene scene: PenScene, andView view: UIView)
 }

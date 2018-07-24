@@ -13,6 +13,7 @@ class PrecisionTestPlugin: Plugin {
     var pluginImage : UIImage? = UIImage.init(named: "cross")
     var pluginIdentifier: String = "PrecisionTest"
     var currentScene : PenScene?
+    var currentView: UIView?
     /**
      The previous point is the point of the pencil one frame before.
      If this var is nil, there was no last point
@@ -54,8 +55,9 @@ class PrecisionTestPlugin: Plugin {
         
     }
     
-    func activatePlugin(withScene scene: PenScene) {
+    func activatePlugin(withScene scene: PenScene, andView view: UIView) {
         self.currentScene = scene
+        self.currentView = view
         _ = scene.drawingNode.childNodes.map({$0.removeFromParentNode()})
         var boxNode = SCNNode()
         boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0.0))

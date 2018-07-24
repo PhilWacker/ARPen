@@ -13,6 +13,7 @@ class PaintPlugin: Plugin {
     var pluginImage : UIImage? = UIImage.init(named: "PaintPlugin")
     var pluginIdentifier: String = "Paint"
     var currentScene : PenScene?
+    var currentView: UIView?
     /**
      The previous point is the point of the pencil one frame before.
      If this var is nil, there was no last point
@@ -52,8 +53,9 @@ class PaintPlugin: Plugin {
         
     }
     
-    func activatePlugin(withScene scene: PenScene) {
+    func activatePlugin(withScene scene: PenScene, andView view: UIView) {
         self.currentScene = scene
+        self.currentView = view
     }
     
 }
