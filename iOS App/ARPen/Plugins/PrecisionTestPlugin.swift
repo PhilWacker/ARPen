@@ -56,6 +56,13 @@ class PrecisionTestPlugin: Plugin {
     
     func activatePlugin(withScene scene: PenScene) {
         self.currentScene = scene
+        _ = scene.drawingNode.childNodes.map({$0.removeFromParentNode()})
+        var boxNode = SCNNode()
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0.0))
+        boxNode.name = "CenterNode"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.blue
+        boxNode.position = SCNVector3Make(0, 0, 0)
+        scene.drawingNode.addChildNode(boxNode)
     }
     
 }
