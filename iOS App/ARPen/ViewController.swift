@@ -169,7 +169,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
             pluginConformingToUserStudyProtocol.recordManager = self.userStudyRecordManager
         }
         if let currentScene = self.pluginManager.arManager.scene {
-            newActivePlugin.activatePlugin(withScene: currentScene, andView: self.view)
+            newActivePlugin.activatePlugin(withScene: currentScene, andView: self.arSceneView)
         }
         
         

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ARKit
 
 class PrecisionTestPlugin: Plugin {
     
@@ -134,6 +135,25 @@ class PrecisionTestPlugin: Plugin {
         boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.95)
         boxNode.position = SCNVector3Make(0.1, 0.205, 0)
         scene.drawingNode.addChildNode(boxNode)
+        
+        let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
+        self.currentView?.addGestureRecognizer(tapRecognizer)
+        self.currentView?.isUserInteractionEnabled = true
+    }
+    
+    @objc func handleTap(_ sender:UITapGestureRecognizer){
+        if sender.state == .ended {
+            print("Tap Recognized")
+            let touchPoint = sender.location(in: self.currentView)
+            
+            guard let sceneView = self.currentView as? SCNView else { return }
+            let hitResults = sceneView.hitTest(touchPoint, options: nil)
+            
+            if let firstItem = hitResults.first {
+                print(firstItem.node.name)
+            }
+        }
+        
     }
     
     func deactivatePlugin() {
