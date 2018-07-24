@@ -27,4 +27,5 @@ protocol Plugin {
     
     
     func activatePlugin(withScene scene: PenScene, andView view: UIView)
+    func deactivatePlugin()
 }

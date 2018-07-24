@@ -157,6 +157,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
         }
         newActivePluginButton.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
         
+        if let currentActivePlugin = self.pluginManager.activePlugin {
+            currentActivePlugin.deactivatePlugin()
+        }
+        
         //activate plugin in plugin manager and update currently active plugin property
         let newActivePlugin = self.pluginManager.plugins[pluginID-1] //-1 needed since the tag is one larger than index of plugin in the array (to avoid tag 0)
         self.pluginManager.activePlugin = newActivePlugin

@@ -58,4 +58,9 @@ class PaintPlugin: Plugin {
         self.currentView = view
     }
     
+    func deactivatePlugin() {
+        self.currentScene = nil
+        self.currentView = nil
+    }
+    
 }

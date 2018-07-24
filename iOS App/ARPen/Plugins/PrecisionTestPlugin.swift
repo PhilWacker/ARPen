@@ -21,7 +21,6 @@ class PrecisionTestPlugin: Plugin {
     private var previousPoint: SCNVector3?
     
     func didUpdateFrame(scene: PenScene, buttons: [Button : Bool]) {
-        print(scene)
         
         guard scene.markerFound else {
             self.previousPoint = nil
@@ -58,7 +57,6 @@ class PrecisionTestPlugin: Plugin {
     func activatePlugin(withScene scene: PenScene, andView view: UIView) {
         self.currentScene = scene
         self.currentView = view
-        _ = scene.drawingNode.childNodes.map({$0.removeFromParentNode()})
         var boxNode = SCNNode()
         //center
         boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0.0))
@@ -138,4 +136,9 @@ class PrecisionTestPlugin: Plugin {
         scene.drawingNode.addChildNode(boxNode)
     }
     
+    func deactivatePlugin() {
+        _ = self.currentScene?.drawingNode.childNodes.map({$0.removeFromParentNode()})
+        self.currentScene = nil
+        self.currentView = nil
+    }
 }
