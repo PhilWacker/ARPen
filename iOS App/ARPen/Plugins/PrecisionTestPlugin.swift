@@ -60,10 +60,81 @@ class PrecisionTestPlugin: Plugin {
         self.currentView = view
         _ = scene.drawingNode.childNodes.map({$0.removeFromParentNode()})
         var boxNode = SCNNode()
+        //center
         boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0.0))
-        boxNode.name = "CenterNode"
+        boxNode.name = "OriginNode"
         boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.blue
-        boxNode.position = SCNVector3Make(0, 0, 0)
+        boxNode.position = SCNVector3Make(0, 0.025, 0)
+        scene.drawingNode.addChildNode(boxNode)
+        
+        //left back low
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "LeftBackLow"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.blue
+        boxNode.position = SCNVector3Make(-0.2, 0.005, -0.3)
+        scene.drawingNode.addChildNode(boxNode)
+        //left front low
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "LeftFrontLow"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
+        boxNode.position = SCNVector3Make(-0.2, 0.005, 0.1)
+        scene.drawingNode.addChildNode(boxNode)
+        //right back low
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "RightBackLow"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.blue
+        boxNode.position = SCNVector3Make(0.2, 0.005, -0.3)
+        scene.drawingNode.addChildNode(boxNode)
+        //right front low
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "RightFrontLow"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
+        boxNode.position = SCNVector3Make(0.2, 0.005, 0.1)
+        scene.drawingNode.addChildNode(boxNode)
+        //left back high
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "LeftBackHigh"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.blue
+        boxNode.position = SCNVector3Make(-0.2, 0.405, -0.3)
+        scene.drawingNode.addChildNode(boxNode)
+        //left front high
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "LeftFrontHigh"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
+        boxNode.position = SCNVector3Make(-0.2, 0.405, 0.1)
+        scene.drawingNode.addChildNode(boxNode)
+        //right back high
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "RightBackHigh"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.blue
+        boxNode.position = SCNVector3Make(0.2, 0.405, -0.3)
+        scene.drawingNode.addChildNode(boxNode)
+        //right front high
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "RightFrontHigh"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.yellow
+        boxNode.position = SCNVector3Make(0.2, 0.405, 0.1)
+        scene.drawingNode.addChildNode(boxNode)
+        
+        //small target
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
+        boxNode.name = "SmallTarget"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.init(red: 1, green: 0, blue: 0, alpha: 0.95)
+        boxNode.position = SCNVector3Make(-0.1, 0.205, 0)
+        scene.drawingNode.addChildNode(boxNode)
+        
+        //medium target
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.02, height: 0.02, length: 0.02, chamferRadius: 0.0))
+        boxNode.name = "MediumTarget"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0.95)
+        boxNode.position = SCNVector3Make(0, 0.205, 0)
+        scene.drawingNode.addChildNode(boxNode)
+        
+        //large target
+        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.03, height: 0.03, length: 0.03, chamferRadius: 0.0))
+        boxNode.name = "LargeTarget"
+        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.95)
+        boxNode.position = SCNVector3Make(0.1, 0.205, 0)
         scene.drawingNode.addChildNode(boxNode)
     }
     
