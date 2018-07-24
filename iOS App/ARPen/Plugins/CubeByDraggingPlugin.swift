@@ -83,4 +83,8 @@ class CubeByDraggingPlugin: Plugin, UserStudyRecordPluginProtocol {
         
     }
    
+    func activatePlugin() {
+        
+    }
+    
 }

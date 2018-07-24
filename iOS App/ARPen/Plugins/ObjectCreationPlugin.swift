@@ -59,4 +59,8 @@ class ObjectCreationPlugin: Plugin {
         
     }
     
+    func activatePlugin() {
+        
+    }
+    
 }

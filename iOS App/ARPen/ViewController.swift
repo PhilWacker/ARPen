@@ -165,6 +165,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
             pluginConformingToUserStudyProtocol.recordManager = self.userStudyRecordManager
         }
         
+        newActivePlugin.activatePlugin()
+        
         currentActivePluginID = pluginID
     }
     

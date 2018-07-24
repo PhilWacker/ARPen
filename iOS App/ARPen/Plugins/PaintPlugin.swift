@@ -51,4 +51,8 @@ class PaintPlugin: Plugin {
         
     }
     
+    func activatePlugin() {
+        
+    }
+    
 }

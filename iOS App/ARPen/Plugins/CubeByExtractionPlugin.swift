@@ -97,4 +97,8 @@ class CubeByExtractionPlugin: Plugin,UserStudyRecordPluginProtocol {
             boxNode.position.y = boxCenterYPosition
         }
     }
+    
+    func activatePlugin() {
+        
+    }
 }
