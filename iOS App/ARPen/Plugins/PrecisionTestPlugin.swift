@@ -151,6 +151,57 @@ class PrecisionTestPlugin: Plugin {
             
             if let firstItem = hitResults.first {
                 print(firstItem.node.name)
+                let boundingBox = firstItem.node.boundingBox
+                
+                //calculate corners of the cube
+                //l = left, r = right, b = back, f = front, d = down, h = high
+                let nodePosition = firstItem.node.position
+                let lbd = SCNVector3Make(nodePosition.x + boundingBox.min.x, nodePosition.y + boundingBox.min.y, nodePosition.z + boundingBox.min.z)
+                let lfd = SCNVector3Make(nodePosition.x + boundingBox.min.x, nodePosition.y + boundingBox.min.y, nodePosition.z + boundingBox.max.z)
+                let rbd = SCNVector3Make(nodePosition.x + boundingBox.max.x, nodePosition.y + boundingBox.min.y, nodePosition.z + boundingBox.min.z)
+                let rfd = SCNVector3Make(nodePosition.x + boundingBox.max.x, nodePosition.y + boundingBox.min.y, nodePosition.z + boundingBox.max.z)
+                
+                let lbh = SCNVector3Make(nodePosition.x + boundingBox.min.x, nodePosition.y + boundingBox.max.y, nodePosition.z + boundingBox.min.z)
+                let lfh = SCNVector3Make(nodePosition.x + boundingBox.min.x, nodePosition.y + boundingBox.max.y, nodePosition.z + boundingBox.max.z)
+                let rbh = SCNVector3Make(nodePosition.x + boundingBox.max.x, nodePosition.y + boundingBox.max.y, nodePosition.z + boundingBox.min.z)
+                let rfh = SCNVector3Make(nodePosition.x + boundingBox.max.x, nodePosition.y + boundingBox.max.y, nodePosition.z + boundingBox.max.z)
+                
+                //test if the positions are correct
+                var sphereNode : SCNNode
+                var positionArray = [lbd, lfd, rbd, rfd, lbh, lfh, rbh, rfh]
+                for x in 0..<8 {
+                    sphereNode = SCNNode.init(geometry: SCNSphere.init(radius: 0.005))
+                    sphereNode.name = "Corner\(x)"
+                    sphereNode.geometry?.firstMaterial?.diffuse.contents = UIColor.red
+                    let position = positionArray[x]
+                    sphereNode.position = position
+                    self.currentScene?.drawingNode.addChildNode(sphereNode)
+                }
+                
+                if let arSceneView = self.currentView as? ARSCNView {
+                    //get projected points of the corners
+                    let projectionArray = positionArray.map({arSceneView.projectPoint($0)})
+                    
+                    var minX : Float = Float.infinity
+                    var maxX : Float = 0
+                    var minY : Float = Float.infinity
+                    var maxY : Float = 0
+                    
+                    for position in projectionArray {
+                        if position.x < minX {minX = position.x}
+                        if position.x > maxX {maxX = position.x}
+                        if position.y < minY {minY = position.y}
+                        if position.y > maxY {maxY = position.y}
+                    }
+                    
+                    if let mainView = self.currentView?.superview {
+                        let newView = UIView.init(frame: CGRect.init(x: Double(minX), y: Double(minY), width: Double(maxX - minX), height: Double(maxY - minY)))
+                        newView.backgroundColor = UIColor.white
+                        mainView.addSubview(newView)
+                        // draw rect from projectedMin to projectedMax
+                    }
+                    
+                }
             }
         }
         
