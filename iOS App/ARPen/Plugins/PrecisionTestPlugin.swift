@@ -15,6 +15,9 @@ class PrecisionTestPlugin: Plugin {
     var pluginIdentifier: String = "PrecisionTest"
     var currentScene : PenScene?
     var currentView: UIView?
+    
+    var boxes : [ARPenBoxNode]?
+    
     /**
      The previous point is the point of the pencil one frame before.
      If this var is nil, there was no last point
@@ -27,6 +30,9 @@ class PrecisionTestPlugin: Plugin {
             self.previousPoint = nil
             return
         }
+        
+        boxes?.forEach({$0.highlightIfPointInside(point: scene.pencilPoint.position)})
+        
         let pressed = buttons[Button.Button1]!
         
         if pressed, let previousPoint = self.previousPoint {
@@ -58,6 +64,7 @@ class PrecisionTestPlugin: Plugin {
     func activatePlugin(withScene scene: PenScene, andView view: UIView) {
         self.currentScene = scene
         self.currentView = view
+    
         var boxNode = SCNNode()
         //center
         boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0.0))
@@ -115,26 +122,7 @@ class PrecisionTestPlugin: Plugin {
         boxNode.position = SCNVector3Make(0.2, 0.405, 0.1)
         scene.drawingNode.addChildNode(boxNode)
         
-        //small target
-        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0.0))
-        boxNode.name = "SmallTarget"
-        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.init(red: 1, green: 0, blue: 0, alpha: 0.95)
-        boxNode.position = SCNVector3Make(-0.1, 0.205, 0)
-        scene.drawingNode.addChildNode(boxNode)
-        
-        //medium target
-        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.02, height: 0.02, length: 0.02, chamferRadius: 0.0))
-        boxNode.name = "MediumTarget"
-        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.init(red: 1, green: 1, blue: 1, alpha: 0.95)
-        boxNode.position = SCNVector3Make(0, 0.205, 0)
-        scene.drawingNode.addChildNode(boxNode)
-        
-        //large target
-        boxNode = SCNNode.init(geometry: SCNBox.init(width: 0.03, height: 0.03, length: 0.03, chamferRadius: 0.0))
-        boxNode.name = "LargeTarget"
-        boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.init(red: 0, green: 0, blue: 0, alpha: 0.95)
-        boxNode.position = SCNVector3Make(0.1, 0.205, 0)
-        scene.drawingNode.addChildNode(boxNode)
+        self.fillSceneWithCubes(scene: scene)
         
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(self.handleTap(_:)))
         self.currentView?.addGestureRecognizer(tapRecognizer)
@@ -204,6 +192,14 @@ class PrecisionTestPlugin: Plugin {
                 }
             }
         }
+        
+    }
+    
+    func fillSceneWithCubes(scene : PenScene) {
+        let sceneConstructor = ARPenSceneConstructor.init()
+        self.boxes = sceneConstructor.preparedARPenBoxNodes()
+        
+        self.boxes?.forEach({scene.drawingNode.addChildNode($0)})
         
     }
     

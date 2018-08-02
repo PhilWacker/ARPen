@@ -8,33 +8,50 @@
 
 import Foundation
 
-struct ARPenBox {
+class ARPenBoxNode : SCNNode {
     //position and corners are in world coordinates
-    let position : SCNVector3
     let dimension : Float
     //l = left, r = right, b = back, f = front, d = down, h = high
     let corners : (lbd : SCNVector3, lfd : SCNVector3, rbd : SCNVector3, rfd : SCNVector3, lbh : SCNVector3, lfh : SCNVector3, rbh : SCNVector3, rfh : SCNVector3)
-    let boxNode : SCNNode
     
     init(withPosition thePosition : SCNVector3, andDimension theDimension : Float) {
-        self.position = thePosition
-        self.dimension = theDimension
         
+        self.dimension = theDimension
         let halfDimension = self.dimension/2
         
-        self.corners.lbd = SCNVector3Make(self.position.x - halfDimension, self.position.y - halfDimension, self.position.z - halfDimension)
-        self.corners.lfd = SCNVector3Make(self.position.x - halfDimension, self.position.y - halfDimension, self.position.z + halfDimension)
-        self.corners.rbd = SCNVector3Make(self.position.x + halfDimension, self.position.y - halfDimension, self.position.z - halfDimension)
-        self.corners.rfd = SCNVector3Make(self.position.x + halfDimension, self.position.y - halfDimension, self.position.z + halfDimension)
-        self.corners.lbh = SCNVector3Make(self.position.x - halfDimension, self.position.y + halfDimension, self.position.z - halfDimension)
-        self.corners.lfh = SCNVector3Make(self.position.x - halfDimension, self.position.y + halfDimension, self.position.z + halfDimension)
-        self.corners.rbh = SCNVector3Make(self.position.x + halfDimension, self.position.y + halfDimension, self.position.z - halfDimension)
-        self.corners.rfh = SCNVector3Make(self.position.x + halfDimension, self.position.y + halfDimension, self.position.z + halfDimension)
+        self.corners.lbd = SCNVector3Make(thePosition.x - halfDimension, thePosition.y - halfDimension, thePosition.z - halfDimension)
+        self.corners.lfd = SCNVector3Make(thePosition.x - halfDimension, thePosition.y - halfDimension, thePosition.z + halfDimension)
+        self.corners.rbd = SCNVector3Make(thePosition.x + halfDimension, thePosition.y - halfDimension, thePosition.z - halfDimension)
+        self.corners.rfd = SCNVector3Make(thePosition.x + halfDimension, thePosition.y - halfDimension, thePosition.z + halfDimension)
+        self.corners.lbh = SCNVector3Make(thePosition.x - halfDimension, thePosition.y + halfDimension, thePosition.z - halfDimension)
+        self.corners.lfh = SCNVector3Make(thePosition.x - halfDimension, thePosition.y + halfDimension, thePosition.z + halfDimension)
+        self.corners.rbh = SCNVector3Make(thePosition.x + halfDimension, thePosition.y + halfDimension, thePosition.z - halfDimension)
+        self.corners.rfh = SCNVector3Make(thePosition.x + halfDimension, thePosition.y + halfDimension, thePosition.z + halfDimension)
+        
+        super.init()
         
         let boxGeometry = SCNBox.init(width: CGFloat(self.dimension), height: CGFloat(self.dimension), length: CGFloat(self.dimension), chamferRadius: 0.0)
-        self.boxNode = SCNNode.init(geometry: boxGeometry)
-        self.boxNode.name = "Box"
-        self.boxNode.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+        self.geometry = boxGeometry
+        self.position = thePosition
+        self.name = "\(thePosition.x), \(thePosition.y), \(thePosition.z)"
+        self.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        self.dimension = 0.0
+        let thePosition = SCNVector3Make(0, 0, 0)
+        let halfDimension = self.dimension/2
+        
+        self.corners.lbd = SCNVector3Make(thePosition.x - halfDimension, thePosition.y - halfDimension, thePosition.z - halfDimension)
+        self.corners.lfd = SCNVector3Make(thePosition.x - halfDimension, thePosition.y - halfDimension, thePosition.z + halfDimension)
+        self.corners.rbd = SCNVector3Make(thePosition.x + halfDimension, thePosition.y - halfDimension, thePosition.z - halfDimension)
+        self.corners.rfd = SCNVector3Make(thePosition.x + halfDimension, thePosition.y - halfDimension, thePosition.z + halfDimension)
+        self.corners.lbh = SCNVector3Make(thePosition.x - halfDimension, thePosition.y + halfDimension, thePosition.z - halfDimension)
+        self.corners.lfh = SCNVector3Make(thePosition.x - halfDimension, thePosition.y + halfDimension, thePosition.z + halfDimension)
+        self.corners.rbh = SCNVector3Make(thePosition.x + halfDimension, thePosition.y + halfDimension, thePosition.z - halfDimension)
+        self.corners.rfh = SCNVector3Make(thePosition.x + halfDimension, thePosition.y + halfDimension, thePosition.z + halfDimension)
+        
+        super.init(coder: aDecoder)
     }
     
     func distance(ofPoint point : SCNVector3) -> Float {
@@ -74,5 +91,24 @@ struct ARPenBox {
         let dim2Distance = min(abs(point.dim2 - dim2Borders.min), abs(point.dim2 - dim2Borders.max))
         
         return sqrtf(powf(dim1Distance, 2) + powf(dim2Distance, 2))
+    }
+    
+    func highlightIfPointInside(point : SCNVector3) {
+        if self.isPointInside(point: point) {
+            self.geometry?.firstMaterial?.diffuse.contents = UIColor.black
+        } else {
+            self.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+        }
+    }
+    
+    func isPointInside(point : SCNVector3) -> Bool {
+        if self.corners.lbd.x <= point.x && point.x <= self.corners.rbd.x
+            && self.corners.lbd.y <= point.y && point.y <= self.corners.lbh.y
+            && self.corners.lbd.z <= point.z && point.z <= self.corners.lfd.z
+        {
+            return true
+        } else {
+            return false
+        }
     }
 }
