@@ -74,7 +74,9 @@ struct ARPenSceneConstructor {
             x += 0.1
             
         }
-        
+        boxes.shuffle()
         return boxes
     }
+    
+    
 }

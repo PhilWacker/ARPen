@@ -84,6 +84,7 @@ class ARManager: NSObject, ARSessionDelegate, ARSessionObserver, OpenCVWrapperDe
             return
         }
         scene.markerFound = false
+        self.delegate?.finishedCalculation()
     }
     
 }

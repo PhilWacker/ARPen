@@ -26,7 +26,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
     @IBOutlet var arSceneView: ARSCNView!
     @IBOutlet weak var pluginMenuScrollView: UIScrollView!
     
-    let menuButtonHeight = 70
+    let menuButtonHeight = 40
     let menuButtonPadding = 5
     var currentActivePluginID = 1
     /**
@@ -68,6 +68,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
         } else {
             print("Record manager was not set up in App Delegate")
         }
+        
+        // Create a session configuration
+        let configuration = ARWorldTrackingConfiguration()
+        
+        // Track image target
+        if let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) {
+            configuration.detectionImages = referenceImages
+        }
+        
+        // Run the view's session
+        arSceneView.session.run(configuration)
+        
     }
     
     /**
@@ -76,16 +88,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-
-        // Track image target
-        if let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) {
-            configuration.detectionImages = referenceImages
-        }
-        
-        // Run the view's session
-        arSceneView.session.run(configuration)
+//        // Create a session configuration
+//        let configuration = ARWorldTrackingConfiguration()
+//
+//        // Track image target
+//        if let referenceImages = ARReferenceImage.referenceImages(inGroupNamed: "AR Resources", bundle: nil) {
+//            configuration.detectionImages = referenceImages
+//        }
+//        
+//        // Run the view's session
+//        arSceneView.session.run(configuration)
         
         // Hide navigation bar
         self.navigationController?.setNavigationBarHidden(true, animated: true)
@@ -95,7 +107,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
         super.viewWillDisappear(animated)
         
         // Pause the view's session
-        arSceneView.session.pause()
+        //arSceneView.session.pause()
         
         // Show navigation bar
         self.navigationController?.setNavigationBarHidden(false, animated: true)

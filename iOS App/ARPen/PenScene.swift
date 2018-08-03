@@ -31,6 +31,7 @@ class PenScene: SCNScene {
      */
     var markerFound = true
     
+    
     /**
      Calling this method will convert the whole scene with every nodes in it to an stl file
      and saves it in the temporary directory as a file

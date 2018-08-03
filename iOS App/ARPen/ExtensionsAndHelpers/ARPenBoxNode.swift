@@ -14,6 +14,19 @@ class ARPenBoxNode : SCNNode {
     //l = left, r = right, b = back, f = front, d = down, h = high
     let corners : (lbd : SCNVector3, lfd : SCNVector3, rbd : SCNVector3, rfd : SCNVector3, lbh : SCNVector3, lfh : SCNVector3, rbh : SCNVector3, rfh : SCNVector3)
     
+    
+    var isActiveTarget = false {
+        didSet {
+            if self.isActiveTarget {
+                self.geometry?.firstMaterial?.diffuse.contents = UIColor.green
+                self.geometry?.firstMaterial?.emission.contents = UIColor.green
+            } else {
+                self.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+                self.geometry?.firstMaterial?.emission.contents = UIColor.white
+            }
+        }
+    }
+    
     init(withPosition thePosition : SCNVector3, andDimension theDimension : Float) {
         
         self.dimension = theDimension
@@ -35,6 +48,14 @@ class ARPenBoxNode : SCNNode {
         self.position = thePosition
         self.name = "\(thePosition.x), \(thePosition.y), \(thePosition.z)"
         self.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+        
+        self.geometry?.firstMaterial?.emission.contents = UIColor.white
+        self.geometry?.firstMaterial?.emission.intensity = 0.0
+        
+//        let omniLight = SCNLight()
+//        omniLight.type = .omni
+//        omniLight.color = UIColor.white
+//        self.light = omniLight
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -95,9 +116,9 @@ class ARPenBoxNode : SCNNode {
     
     func highlightIfPointInside(point : SCNVector3) {
         if self.isPointInside(point: point) {
-            self.geometry?.firstMaterial?.diffuse.contents = UIColor.black
+            self.geometry?.firstMaterial?.emission.intensity = 1.0
         } else {
-            self.geometry?.firstMaterial?.diffuse.contents = UIColor.white
+            self.geometry?.firstMaterial?.emission.intensity = 0.0
         }
     }
     
