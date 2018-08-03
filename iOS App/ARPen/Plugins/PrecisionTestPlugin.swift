@@ -182,6 +182,43 @@ class PrecisionTestPlugin: Plugin {
                         if position.y > maxY {maxY = position.y}
                     }
                     
+                    //get device type
+                    let xSizeInPoints = maxX - minX
+                    let ySizeInPoints = maxY - minY
+                    var xSizeInPixels = xSizeInPoints * 3
+                    var ySizeInPixels = ySizeInPoints * 3
+                    
+                    var ppi : Float = 0
+                    
+                    if UIDevice().userInterfaceIdiom == .phone {
+                        switch UIScreen.main.nativeBounds.height {
+                        case 1334:
+                            print("iPhone 6/6S/7/8")
+                            ppi = 326
+                        case 2208:
+                            print("iPhone 6+/6S+/7+/8+")
+                            ppi = 401
+                            xSizeInPixels /= 1.15
+                            ySizeInPixels /= 1.15
+                        case 2436:
+                            print("iPhone X")
+                            ppi = 458
+                        default:
+                            print("unknown")
+                        }
+                    }
+                    
+                    let xSizeInInches = xSizeInPixels/ppi
+                    let ySizeInInches = ySizeInPixels/ppi
+                    
+                    let xSizeInCM = xSizeInInches * 2.54
+                    let ySizeInCM = ySizeInInches * 2.54
+                    
+                    let sizeOfProjection = xSizeInCM * ySizeInCM
+                    
+                    print(xSizeInCM)
+                    print(ySizeInCM)
+                    
                     if let mainView = self.currentView?.superview {
                         let newView = UIView.init(frame: CGRect.init(x: Double(minX), y: Double(minY), width: Double(maxX - minX), height: Double(maxY - minY)))
                         newView.backgroundColor = UIColor.white

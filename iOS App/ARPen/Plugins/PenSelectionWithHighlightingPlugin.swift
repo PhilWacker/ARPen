@@ -11,10 +11,11 @@ import Foundation
 import Foundation
 import ARKit
 
-class PenSelectionWithHighlightingPlugin: Plugin {
+class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol {
+    var recordManager: UserStudyRecordManager!
     
     var pluginImage : UIImage? = UIImage.init(named: "cross")
-    var pluginIdentifier: String = "PenSelectionWithHighlighting"
+    var pluginIdentifier: String = "PenWithHighlighting"
     var currentScene : PenScene?
     var currentView: UIView?
     var finishedView : UILabel?
@@ -24,9 +25,13 @@ class PenSelectionWithHighlightingPlugin: Plugin {
         didSet {
             oldValue?.isActiveTarget = false
             self.activeTargetBox?.isActiveTarget = true
+            self.startTimeOfCurrentSelection = Date()
         }
     }
     var indexOfCurrentTargetBox = 0
+    
+    //data recording
+    var startTimeOfCurrentSelection : Date?
     
     /**
      The previous point is the point of the pencil one frame before.
@@ -55,32 +60,31 @@ class PenSelectionWithHighlightingPlugin: Plugin {
         
         let pressed = buttons[Button.Button1]! || buttons[Button.Button2]!
         
-        if pressed, !self.previousButtonState, let activeTargetBox = self.activeTargetBox {
-            if activeTargetBox.isPointInside(point: scene.pencilPoint.position) {
-                print("Correct selection")
-            } else {
-                print("Miss")
-            }
-            self.indexOfCurrentTargetBox += 1
-            if self.indexOfCurrentTargetBox < 3 /*boxes.count*/ {
-                self.activeTargetBox = boxes[self.indexOfCurrentTargetBox]
-            } else {
-                self.activeTargetBox = nil
-                print("Done")
-                DispatchQueue.main.async {
-                    self.finishedView = UILabel.init()
-                    self.finishedView?.text = "Done"
-                    self.finishedView?.font = UIFont.preferredFont(forTextStyle: .largeTitle)
-                    self.finishedView?.textColor = UIColor.yellow
-                    self.finishedView?.textAlignment = .center
-                    self.finishedView?.layer.borderWidth = 20.0
-                    self.finishedView?.layer.borderColor = UIColor.yellow.cgColor
-                    if let superview = self.currentView?.superview, let finishedView = self.finishedView {
-                        finishedView.frame.size = CGSize.init(width: 300, height: 300)
-                        finishedView.center = superview.center
-                        superview.addSubview(finishedView)
+        if pressed, !self.previousButtonState{
+            
+            if let activeTargetBox = self.activeTargetBox {
+                
+                self.saveDateEntry(withTarget: activeTargetBox, inScene: scene)
+                
+                //activate next target
+                self.indexOfCurrentTargetBox += 1
+                if self.indexOfCurrentTargetBox < 3 /*boxes.count*/ {
+                    self.activeTargetBox = boxes[self.indexOfCurrentTargetBox]
+                } else {
+                    self.activeTargetBox = nil
+                    print("Done")
+                    DispatchQueue.main.async {
+                        self.finishedView?.text = "Done"
+                        if let superview = self.currentView?.superview, let finishedView = self.finishedView {
+                            superview.addSubview(finishedView)
+                        }
                     }
                 }
+            } else if self.indexOfCurrentTargetBox == 0 {
+                DispatchQueue.main.async {
+                    self.finishedView?.removeFromSuperview()
+                }
+                self.activeTargetBox = boxes.first
             }
         }
         
@@ -94,7 +98,6 @@ class PenSelectionWithHighlightingPlugin: Plugin {
         self.currentView = view
         self.currentView?.superview?.layer.borderWidth = 10.0
         
-        
         self.fillSceneWithCubes(scene: scene)
     }
     
@@ -106,8 +109,108 @@ class PenSelectionWithHighlightingPlugin: Plugin {
         self.boxes?.forEach({scene.drawingNode.addChildNode($0)})
         
         self.indexOfCurrentTargetBox = 0
-        self.activeTargetBox = self.boxes?.first
+//        self.activeTargetBox = self.boxes?.first
         
+        DispatchQueue.main.async {
+            self.finishedView = UILabel.init()
+            self.finishedView?.text = "Press a button to start"
+            self.finishedView?.font = UIFont.preferredFont(forTextStyle: .largeTitle)
+            self.finishedView?.textColor = UIColor.yellow
+            self.finishedView?.textAlignment = .center
+            self.finishedView?.layer.borderWidth = 20.0
+            self.finishedView?.layer.borderColor = UIColor.yellow.cgColor
+            if let superview = self.currentView?.superview, let finishedView = self.finishedView {
+                finishedView.frame.size = CGSize.init(width: 500, height: 300)
+                finishedView.center = superview.center
+                superview.addSubview(finishedView)
+            }
+        }
+        
+    }
+    
+    func saveDateEntry(withTarget box : ARPenBoxNode, inScene scene : PenScene) {
+        guard let startTime = self.startTimeOfCurrentSelection, let arSceneView = self.currentView as? ARSCNView else {
+            print("Start time or currentView was was not set")
+            print("Start time: \(self.startTimeOfCurrentSelection)")
+            print("Current view: \(self.currentView)")
+            return
+        }
+        let duration = Date().timeIntervalSince(startTime)
+
+        let success : Bool
+        if box.isPointInside(point: scene.pencilPoint.position) {
+            print("Correct selection")
+            success = true
+        } else {
+            print("Miss")
+            success = false
+        }
+        
+        let deviation = box.distance(ofPoint: scene.pencilPoint.position)*100
+        
+        let actualDimension = box.dimension*100
+        
+        //deviation vector from camera view
+        let deviationVectorInWorldView = SCNVector3Make(box.position.x - scene.pencilPoint.position.x, box.position.y - scene.pencilPoint.position.y , box.position.z - scene.pencilPoint.position.z)
+        var deviationVectorInCameraView : SCNVector3?
+        if let cameraNode = arSceneView.pointOfView {
+            deviationVectorInCameraView = scene.drawingNode.convertVector(deviationVectorInWorldView, to: cameraNode)
+        }
+        
+        //size of the projection
+        
+        //get projected points of the corners
+        let positionArray = [box.corners.lbd, box.corners.lfd, box.corners.lbh, box.corners.lfh, box.corners.rbd, box.corners.rfd, box.corners.rbh, box.corners.rfh]
+        let projectionArray = positionArray.map({arSceneView.projectPoint($0)})
+        
+        var minX : Float = Float.infinity
+        var maxX : Float = 0
+        var minY : Float = Float.infinity
+        var maxY : Float = 0
+        
+        for position in projectionArray {
+            if position.x < minX {minX = position.x}
+            if position.x > maxX {maxX = position.x}
+            if position.y < minY {minY = position.y}
+            if position.y > maxY {maxY = position.y}
+        }
+        
+        //get device type
+        let xSizeInPoints = maxX - minX
+        let ySizeInPoints = maxY - minY
+        var xSizeInPixels = xSizeInPoints * 3
+        var ySizeInPixels = ySizeInPoints * 3
+        
+        var ppi : Float = 0
+        
+        if UIDevice().userInterfaceIdiom == .phone {
+            switch UIScreen.main.nativeBounds.height {
+            case 1334:
+                print("iPhone 6/6S/7/8")
+                ppi = 326
+            case 2208:
+                print("iPhone 6+/6S+/7+/8+")
+                ppi = 401
+                xSizeInPixels /= 1.15
+                ySizeInPixels /= 1.15
+            case 2436:
+                print("iPhone X")
+                ppi = 458
+            default:
+                print("unknown")
+            }
+        }
+        
+        let xSizeInInches = xSizeInPixels/ppi
+        let ySizeInInches = ySizeInPixels/ppi
+        
+        let xSizeInCM = xSizeInInches * 2.54
+        let ySizeInCM = ySizeInInches * 2.54
+        
+        let sizeOfProjection = xSizeInCM * ySizeInCM
+        
+        print(xSizeInCM)
+        print(ySizeInCM)
         
     }
     

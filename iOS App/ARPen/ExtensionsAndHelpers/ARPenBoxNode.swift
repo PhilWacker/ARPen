@@ -51,11 +51,6 @@ class ARPenBoxNode : SCNNode {
         
         self.geometry?.firstMaterial?.emission.contents = UIColor.white
         self.geometry?.firstMaterial?.emission.intensity = 0.0
-        
-//        let omniLight = SCNLight()
-//        omniLight.type = .omni
-//        omniLight.color = UIColor.white
-//        self.light = omniLight
     }
     
     required init?(coder aDecoder: NSCoder) {
