@@ -21,6 +21,10 @@
 		4AEED24F2112F1ED000DE691 /* ARPenSceneConstructor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEED24E2112F1ED000DE691 /* ARPenSceneConstructor.swift */; };
 		4AEED25121144521000DE691 /* PenSelectionWithHighlightingPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEED25021144521000DE691 /* PenSelectionWithHighlightingPlugin.swift */; };
 		4AEED25321144B1A000DE691 /* MutableCollectionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEED25221144B1A000DE691 /* MutableCollectionExtension.swift */; };
+		4AEED255211842F6000DE691 /* PenSelectionWithoutHighlightingPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEED254211842F6000DE691 /* PenSelectionWithoutHighlightingPlugin.swift */; };
+		4AEED257211846E0000DE691 /* OnehandedTouchPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEED256211846E0000DE691 /* OnehandedTouchPlugin.swift */; };
+		4AEED25921185632000DE691 /* ConvexHullCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEED25821185632000DE691 /* ConvexHullCalculator.swift */; };
+		4AEED25B21188972000DE691 /* TwohandedTouchPlugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEED25A21188972000DE691 /* TwohandedTouchPlugin.swift */; };
 		DC18B2BC202384D700884920 /* UserDefaultsKeys.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC18B2BB202384D700884920 /* UserDefaultsKeys.swift */; };
 		DC28B440200E4353008B77AB /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC28B43F200E4353008B77AB /* AppDelegate.swift */; };
 		DC28B442200E4353008B77AB /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = DC28B441200E4353008B77AB /* art.scnassets */; };
@@ -71,6 +75,10 @@
 		4AEED24E2112F1ED000DE691 /* ARPenSceneConstructor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARPenSceneConstructor.swift; sourceTree = "<group>"; };
 		4AEED25021144521000DE691 /* PenSelectionWithHighlightingPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenSelectionWithHighlightingPlugin.swift; sourceTree = "<group>"; };
 		4AEED25221144B1A000DE691 /* MutableCollectionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MutableCollectionExtension.swift; sourceTree = "<group>"; };
+		4AEED254211842F6000DE691 /* PenSelectionWithoutHighlightingPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PenSelectionWithoutHighlightingPlugin.swift; sourceTree = "<group>"; };
+		4AEED256211846E0000DE691 /* OnehandedTouchPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnehandedTouchPlugin.swift; sourceTree = "<group>"; };
+		4AEED25821185632000DE691 /* ConvexHullCalculator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConvexHullCalculator.swift; sourceTree = "<group>"; };
+		4AEED25A21188972000DE691 /* TwohandedTouchPlugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TwohandedTouchPlugin.swift; sourceTree = "<group>"; };
 		DC18B2BB202384D700884920 /* UserDefaultsKeys.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDefaultsKeys.swift; sourceTree = "<group>"; };
 		DC28B43C200E4353008B77AB /* ARPen.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ARPen.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC28B43F200E4353008B77AB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -205,6 +213,9 @@
 				DC28B466200E4BF1008B77AB /* PaintPlugin.swift */,
 				4A34DAAC2107194E00169A83 /* PrecisionTestPlugin.swift */,
 				4AEED25021144521000DE691 /* PenSelectionWithHighlightingPlugin.swift */,
+				4AEED254211842F6000DE691 /* PenSelectionWithoutHighlightingPlugin.swift */,
+				4AEED256211846E0000DE691 /* OnehandedTouchPlugin.swift */,
+				4AEED25A21188972000DE691 /* TwohandedTouchPlugin.swift */,
 			);
 			path = Plugins;
 			sourceTree = "<group>";
@@ -218,6 +229,7 @@
 				DC28B470200E592C008B77AB /* DegreesToRadians.swift */,
 				4AEED24C210F414A000DE691 /* ARPenBoxNode.swift */,
 				4AEED24E2112F1ED000DE691 /* ARPenSceneConstructor.swift */,
+				4AEED25821185632000DE691 /* ConvexHullCalculator.swift */,
 			);
 			path = ExtensionsAndHelpers;
 			sourceTree = "<group>";
@@ -302,15 +314,18 @@
 				4A56953B20581B9000C8065E /* UserStudyRecordPluginProtocol.swift in Sources */,
 				DC28B47A200E7E8A008B77AB /* MarkerBox.m in Sources */,
 				4A5695342058195200C8065E /* UserStudyRecordsListTableViewController.swift in Sources */,
+				4AEED25B21188972000DE691 /* TwohandedTouchPlugin.swift in Sources */,
 				DC28B45F200E4561008B77AB /* PenManager.swift in Sources */,
 				4A56953920581B6700C8065E /* UserStudyRecordManager.swift in Sources */,
 				4AEED25121144521000DE691 /* PenSelectionWithHighlightingPlugin.swift in Sources */,
 				DC28B465200E4825008B77AB /* PenScene.swift in Sources */,
+				4AEED255211842F6000DE691 /* PenSelectionWithoutHighlightingPlugin.swift in Sources */,
 				4AC711C9204FDCE800CD4239 /* BluetoothDeviceListTableViewController.swift in Sources */,
 				DC18B2BC202384D700884920 /* UserDefaultsKeys.swift in Sources */,
 				4A34DAAD2107194E00169A83 /* PrecisionTestPlugin.swift in Sources */,
 				DC28B45C200E4470008B77AB /* OpenCVWrapper.mm in Sources */,
 				DC28B444200E4353008B77AB /* ViewController.swift in Sources */,
+				4AEED25921185632000DE691 /* ConvexHullCalculator.swift in Sources */,
 				DC28B46D200E4E6E008B77AB /* MarkerBox.swift in Sources */,
 				4AEED24F2112F1ED000DE691 /* ARPenSceneConstructor.swift in Sources */,
 				DC28B469200E4C43008B77AB /* CylinderLine.swift in Sources */,
@@ -321,6 +336,7 @@
 				DC28B440200E4353008B77AB /* AppDelegate.swift in Sources */,
 				DC28B463200E471F008B77AB /* PluginManager.swift in Sources */,
 				DC28B467200E4BF1008B77AB /* PaintPlugin.swift in Sources */,
+				4AEED257211846E0000DE691 /* OnehandedTouchPlugin.swift in Sources */,
 				4AEED24D210F414A000DE691 /* ARPenBoxNode.swift in Sources */,
 				4AC711C7204EDCBE00CD4239 /* SettingsTableViewController.swift in Sources */,
 				DC28B46B200E4C78008B77AB /* Button.swift in Sources */,

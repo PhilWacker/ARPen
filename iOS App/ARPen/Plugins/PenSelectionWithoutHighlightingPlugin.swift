@@ -1,8 +1,8 @@
 //
-//  PenSelectionWithHighlightingPlugin.swift
+//  PenSelectionWithoutHighlightingPlugin.swift
 //  ARPen
 //
-//  Created by Philipp Wacker on 03.08.18.
+//  Created by Philipp Wacker on 06.08.18.
 //  Copyright © 2018 RWTH Aachen. All rights reserved.
 //
 
@@ -11,11 +11,11 @@ import Foundation
 import Foundation
 import ARKit
 
-class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol {
+class PenSelectionWithoutHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol {
     var recordManager: UserStudyRecordManager!
     
     var pluginImage : UIImage? = UIImage.init(named: "cross")
-    var pluginIdentifier: String = "PenWithHighlighting"
+    var pluginIdentifier: String = "PenWithoutHighlighting"
     var currentScene : PenScene?
     var currentView: UIView?
     var finishedView : UILabel?
@@ -56,7 +56,8 @@ class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol 
         
         guard let boxes = self.boxes else {return}
         
-        boxes.forEach({$0.highlightIfPointInside(point: scene.pencilPoint.position)})
+        //no hightlighting of selection in this condition
+        //boxes.forEach({$0.highlightIfPointInside(point: scene.pencilPoint.position)})
         
         let pressed = buttons[Button.Button1]! || buttons[Button.Button2]!
         
@@ -99,6 +100,9 @@ class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol 
         self.currentView?.superview?.layer.borderWidth = 10.0
         
         self.fillSceneWithCubes(scene: scene)
+        
+        self.currentScene?.pencilPoint.geometry?.firstMaterial?.diffuse.contents = UIColor.clear
+        
     }
     
     
@@ -109,7 +113,7 @@ class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol 
         self.boxes?.forEach({scene.drawingNode.addChildNode($0)})
         
         self.indexOfCurrentTargetBox = 0
-//        self.activeTargetBox = self.boxes?.first
+        //        self.activeTargetBox = self.boxes?.first
         
         DispatchQueue.main.async {
             self.finishedView = UILabel.init()
@@ -136,7 +140,7 @@ class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol 
             return
         }
         let duration = Date().timeIntervalSince(startTime)
-
+        
         let success : Bool
         if box.isPointInside(point: scene.pencilPoint.position) {
             success = true
@@ -215,6 +219,7 @@ class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol 
     }
     
     func deactivatePlugin() {
+        self.currentScene?.pencilPoint.geometry?.materials.first?.diffuse.contents = UIColor.red
         _ = self.currentScene?.drawingNode.childNodes.map({$0.removeFromParentNode()})
         self.currentScene = nil
         self.finishedView?.removeFromSuperview()
@@ -223,3 +228,4 @@ class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol 
         self.currentView = nil
     }
 }
+
