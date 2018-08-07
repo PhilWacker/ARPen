@@ -21,8 +21,15 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Z1i-B5-dqO">
                                 <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
                             </arscnView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="qjN-Oq-2YS" userLabel="OutlierButton">
+                                <rect key="frame" x="619" y="10" width="38" height="38"/>
+                                <state key="normal" image="Cross"/>
+                                <connections>
+                                    <action selector="outlierButtonPressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="PC0-JG-iy2"/>
+                                </connections>
+                            </button>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gGF-H0-N2c">
-                                <rect key="frame" x="587" y="0.0" width="80" height="317"/>
+                                <rect key="frame" x="587" y="58" width="80" height="259"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="80" id="Oyw-aP-dMg"/>
                                 </constraints>
@@ -147,13 +154,17 @@
                             <constraint firstItem="iYd-yH-V3o" firstAttribute="leading" secondItem="YSQ-pH-N6L" secondAttribute="leading" id="96J-6E-dhy"/>
                             <constraint firstItem="EIQ-Ip-Tyt" firstAttribute="trailing" secondItem="A5z-U4-mJN" secondAttribute="trailing" constant="10" id="CMI-vn-wNc"/>
                             <constraint firstItem="Z1i-B5-dqO" firstAttribute="bottom" secondItem="YSQ-pH-N6L" secondAttribute="bottom" id="DLC-mq-LKi"/>
+                            <constraint firstItem="gGF-H0-N2c" firstAttribute="top" secondItem="qjN-Oq-2YS" secondAttribute="bottom" constant="10" id="DNn-iW-hY8"/>
                             <constraint firstItem="Z1i-B5-dqO" firstAttribute="top" secondItem="YSQ-pH-N6L" secondAttribute="top" id="LBk-3V-d3Y"/>
-                            <constraint firstItem="gGF-H0-N2c" firstAttribute="top" secondItem="YSQ-pH-N6L" secondAttribute="top" id="QDe-OA-GDZ"/>
                             <constraint firstItem="EIQ-Ip-Tyt" firstAttribute="bottom" secondItem="A5z-U4-mJN" secondAttribute="bottom" constant="10" id="QsW-2Q-MbL"/>
                             <constraint firstItem="iYd-yH-V3o" firstAttribute="trailing" secondItem="YSQ-pH-N6L" secondAttribute="trailing" id="Un0-kz-gbv"/>
                             <constraint firstAttribute="trailing" secondItem="Z1i-B5-dqO" secondAttribute="trailing" id="ZCc-G1-ORQ"/>
                             <constraint firstItem="iYd-yH-V3o" firstAttribute="top" secondItem="YSQ-pH-N6L" secondAttribute="top" id="ZUV-Sl-MuL"/>
                             <constraint firstItem="iYd-yH-V3o" firstAttribute="bottom" secondItem="YSQ-pH-N6L" secondAttribute="bottom" id="cqj-y5-Wso"/>
+                            <constraint firstItem="qjN-Oq-2YS" firstAttribute="height" secondItem="A5z-U4-mJN" secondAttribute="height" id="lfP-7P-Oom"/>
+                            <constraint firstItem="qjN-Oq-2YS" firstAttribute="width" secondItem="A5z-U4-mJN" secondAttribute="width" id="nN6-N8-nG1"/>
+                            <constraint firstItem="qjN-Oq-2YS" firstAttribute="trailing" secondItem="EIQ-Ip-Tyt" secondAttribute="trailing" constant="-10" id="ohf-Tr-RJc"/>
+                            <constraint firstItem="qjN-Oq-2YS" firstAttribute="top" secondItem="EIQ-Ip-Tyt" secondAttribute="top" constant="10" id="sLb-W1-d7O"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="EIQ-Ip-Tyt"/>
                     </view>
@@ -681,6 +692,7 @@
     </scenes>
     <resources>
         <image name="Checkmark" width="37" height="37"/>
+        <image name="Cross" width="97" height="97"/>
         <image name="cog" width="128" height="128"/>
     </resources>
 </document>

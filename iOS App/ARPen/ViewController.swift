@@ -188,6 +188,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
         currentActivePluginID = pluginID
     }
     
+    @IBAction func outlierButtonPressed(_ sender: Any) {
+        self.userStudyRecordManager.markLastRecordAsAnOutlier()
+    }
     /**
      Prepare the SettingsViewController by passing the scene
      */
