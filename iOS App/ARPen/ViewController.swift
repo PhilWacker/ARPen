@@ -189,8 +189,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
     }
     
     @IBAction func outlierButtonPressed(_ sender: Any) {
-        self.userStudyRecordManager.markLastRecordAsAnOutlier()
         if let pluginConformingToUserStudyProtocol = self.pluginManager.activePlugin as? UserStudyRecordPluginProtocol {
+            self.userStudyRecordManager.markLastRecordAsAnOutlier()
             pluginConformingToUserStudyProtocol.lastTrialWasMarkedAsAnOutlier()
         }
     }

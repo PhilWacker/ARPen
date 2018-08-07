@@ -59,6 +59,7 @@ class PaintPlugin: Plugin {
     }
     
     func deactivatePlugin() {
+        _ = self.currentScene?.drawingNode.childNodes.map({$0.removeFromParentNode()})
         self.currentScene = nil
         self.currentView = nil
     }
