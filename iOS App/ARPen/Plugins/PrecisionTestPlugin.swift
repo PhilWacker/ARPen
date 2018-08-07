@@ -191,11 +191,12 @@ class PrecisionTestPlugin: Plugin {
                     var ppi : Float = 0
                     
                     if UIDevice().userInterfaceIdiom == .phone {
+                        print("Height: \(UIScreen.main.nativeBounds.height)")
                         switch UIScreen.main.nativeBounds.height {
                         case 1334:
                             print("iPhone 6/6S/7/8")
                             ppi = 326
-                        case 2208:
+                        case 2208, 1920:
                             print("iPhone 6+/6S+/7+/8+")
                             ppi = 401
                             xSizeInPixels /= 1.15
@@ -204,7 +205,7 @@ class PrecisionTestPlugin: Plugin {
                             print("iPhone X")
                             ppi = 458
                         default:
-                            print("unknown")
+                            print("unknown phone")
                         }
                     }
                     

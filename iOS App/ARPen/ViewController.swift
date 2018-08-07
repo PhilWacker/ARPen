@@ -190,6 +190,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, PluginManagerDelegate
     
     @IBAction func outlierButtonPressed(_ sender: Any) {
         self.userStudyRecordManager.markLastRecordAsAnOutlier()
+        if let pluginConformingToUserStudyProtocol = self.pluginManager.activePlugin as? UserStudyRecordPluginProtocol {
+            pluginConformingToUserStudyProtocol.lastTrialWasMarkedAsAnOutlier()
+        }
     }
     /**
      Prepare the SettingsViewController by passing the scene

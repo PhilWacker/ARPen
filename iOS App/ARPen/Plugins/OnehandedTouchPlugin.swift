@@ -14,7 +14,7 @@ import ARKit
 class OnehandedTouchPlugin: Plugin, UserStudyRecordPluginProtocol {
     var recordManager: UserStudyRecordManager!
     
-    var pluginImage : UIImage? = UIImage.init(named: "cross")
+    var pluginImage : UIImage? = UIImage.init(named: "RecordPlugin")
     var pluginIdentifier: String = "OnehandedTouch"
     var currentScene : PenScene?
     var currentView: UIView?
@@ -72,11 +72,11 @@ class OnehandedTouchPlugin: Plugin, UserStudyRecordPluginProtocol {
                         }
                     }
                 }
-            } else if self.indexOfCurrentTargetBox == 0 {
+            } else if self.indexOfCurrentTargetBox < boxes.count {
                 DispatchQueue.main.async {
                     self.finishedView?.removeFromSuperview()
                 }
-                self.activeTargetBox = boxes.first
+                self.activeTargetBox = boxes[self.indexOfCurrentTargetBox]
             }
             
         }
@@ -190,7 +190,7 @@ class OnehandedTouchPlugin: Plugin, UserStudyRecordPluginProtocol {
             case 1334:
                 //print("iPhone 6/6S/7/8")
                 ppi = 326
-            case 2208:
+            case 2208, 1920:
                 //print("iPhone 6+/6S+/7+/8+")
                 ppi = 401
                 xSizeInPixels /= 1.15
@@ -215,6 +215,19 @@ class OnehandedTouchPlugin: Plugin, UserStudyRecordPluginProtocol {
         
         let targetMeasurementDict = ["TimeForSelection" : String(describing: duration), "Success" : String(describing: success), "IsOnRay" : String(describing: isOnRay), "Deviation" : String(describing: deviationInCM), "DeviationVectorX" : String(describing: abs(deviationVectorInCameraView.x)), "DeviationVectorY" : String(describing: abs(deviationVectorInCameraView.y)), "DeviationVectorZ" : String(describing: abs(deviationVectorInCameraView.z)), "ProjectedSizeOfTarget" : String(describing: sizeOfProjection), "DimensionOfTarget" : String(describing: actualDimension)]
         self.recordManager.addNewRecord(withIdentifier: self.pluginIdentifier, andData: targetMeasurementDict)
+    }
+    
+    func lastTrialWasMarkedAsAnOutlier() {
+        if self.indexOfCurrentTargetBox > 0 {
+            self.indexOfCurrentTargetBox -= 1
+        }
+        self.activeTargetBox = nil
+        DispatchQueue.main.async {
+            self.finishedView?.text = "Touch screen to continue"
+            if let superview = self.currentView?.superview, let finishedView = self.finishedView {
+                superview.addSubview(finishedView)
+            }
+        }
     }
     
     func distance(ofPoint point : CGPoint, toProjectedBox projectedCorners : [SCNVector3]) -> Float {
@@ -289,6 +302,7 @@ class OnehandedTouchPlugin: Plugin, UserStudyRecordPluginProtocol {
     }
     
     func deactivatePlugin() {
+        self.activeTargetBox = nil
         _ = self.currentScene?.drawingNode.childNodes.map({$0.removeFromParentNode()})
         self.currentScene = nil
         self.finishedView?.removeFromSuperview()

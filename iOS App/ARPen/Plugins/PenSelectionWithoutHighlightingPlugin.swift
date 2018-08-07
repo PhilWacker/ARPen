@@ -14,7 +14,7 @@ import ARKit
 class PenSelectionWithoutHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol {
     var recordManager: UserStudyRecordManager!
     
-    var pluginImage : UIImage? = UIImage.init(named: "cross")
+    var pluginImage : UIImage? = UIImage.init(named: "RecordPlugin")
     var pluginIdentifier: String = "PenWithoutHighlighting"
     var currentScene : PenScene?
     var currentView: UIView?
@@ -81,11 +81,11 @@ class PenSelectionWithoutHighlightingPlugin: Plugin, UserStudyRecordPluginProtoc
                         }
                     }
                 }
-            } else if self.indexOfCurrentTargetBox == 0 {
+            } else if self.indexOfCurrentTargetBox < boxes.count {
                 DispatchQueue.main.async {
                     self.finishedView?.removeFromSuperview()
                 }
-                self.activeTargetBox = boxes.first
+                self.activeTargetBox = boxes[self.indexOfCurrentTargetBox]
             }
         }
         
@@ -193,7 +193,7 @@ class PenSelectionWithoutHighlightingPlugin: Plugin, UserStudyRecordPluginProtoc
             case 1334:
                 //print("iPhone 6/6S/7/8")
                 ppi = 326
-            case 2208:
+            case 2208, 1920:
                 //print("iPhone 6+/6S+/7+/8+")
                 ppi = 401
                 xSizeInPixels /= 1.15
@@ -218,7 +218,21 @@ class PenSelectionWithoutHighlightingPlugin: Plugin, UserStudyRecordPluginProtoc
         self.recordManager.addNewRecord(withIdentifier: self.pluginIdentifier, andData: targetMeasurementDict)
     }
     
+    func lastTrialWasMarkedAsAnOutlier() {
+        if self.indexOfCurrentTargetBox > 0 {
+            self.indexOfCurrentTargetBox -= 1
+        }
+        self.activeTargetBox = nil
+        DispatchQueue.main.async {
+            self.finishedView?.text = "Press a button to continue"
+            if let superview = self.currentView?.superview, let finishedView = self.finishedView {
+                superview.addSubview(finishedView)
+            }
+        }
+    }
+    
     func deactivatePlugin() {
+        self.activeTargetBox = nil
         self.currentScene?.pencilPoint.geometry?.materials.first?.diffuse.contents = UIColor.red
         _ = self.currentScene?.drawingNode.childNodes.map({$0.removeFromParentNode()})
         self.currentScene = nil
