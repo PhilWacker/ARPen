@@ -12,7 +12,7 @@ import Foundation
 class UserStudyRecordManager : NSObject{
     fileprivate var userStudyData : [Int:[UserStudyRecord]]
     
-    var currentActiveUserID : Int? = nil {
+    var currentActiveUserID : Int? = -1 {
         //if a new userID is set, create an empty array for the records for this new userID (key)
         didSet{
             if let currentActiveUserID = currentActiveUserID, self.userStudyData[currentActiveUserID] == nil {
@@ -76,6 +76,20 @@ class UserStudyRecordManager : NSObject{
     //delete a specific record at a specified position in the records array from a specified userID
     func deleteRecord(atPosition position: Int, forID id: Int) {
         self.userStudyData[id]?.remove(at: position)
+    }
+    
+    //mark last record as an outlier
+    func markLastRecordAsAnOutlier() {
+        guard let currentActiveUserID = self.currentActiveUserID else {
+            return
+        }
+        var dataRecordsOfCurrentUser = self.userStudyData[currentActiveUserID]
+        guard let lastRecord = dataRecordsOfCurrentUser?.popLast() else { return }
+        var data = lastRecord.data
+        data["MarkedAsOutlier"] = String(describing: true)
+        let newRecord = UserStudyRecord(creationTime: lastRecord.creationTime, identifier: lastRecord.identifier, data: data)
+        dataRecordsOfCurrentUser?.append(newRecord)
+        self.userStudyData[currentActiveUserID] = dataRecordsOfCurrentUser
     }
     
     //data export methods
