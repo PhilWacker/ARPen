@@ -210,7 +210,7 @@ class PenSelectionWithHighlightingPlugin: Plugin, UserStudyRecordPluginProtocol 
         
         let sizeOfProjection = xSizeInCM * ySizeInCM
         
-        let targetMeasurementDict = ["TimeForSelection" : String(describing: duration), "Success" : String(describing: success), "Deviation" : String(describing: deviation), "DeviationVectorX" : String(describing: abs(deviationVectorInCameraView.x)), "DeviationVectorY" : String(describing: abs(deviationVectorInCameraView.y)), "DeviationVectorZ" : String(describing: abs(deviationVectorInCameraView.z)), "ProjectedSizeOfTarget" : String(describing: sizeOfProjection), "DimensionOfTarget" : String(describing: actualDimension)]
+        let targetMeasurementDict = ["TimeForSelection" : String(describing: duration), "Success" : String(describing: success), "Deviation" : String(describing: deviation), "DeviationVectorX" : String(describing: deviationVectorInCameraView.x), "DeviationVectorY" : String(describing: deviationVectorInCameraView.y), "DeviationVectorZ" : String(describing: deviationVectorInCameraView.z), "ProjectedSizeOfTarget" : String(describing: sizeOfProjection), "DimensionOfTarget" : String(describing: actualDimension)]
         self.recordManager.addNewRecord(withIdentifier: self.pluginIdentifier, andData: targetMeasurementDict)
     }
     
